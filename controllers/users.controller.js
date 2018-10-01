@@ -2,7 +2,23 @@ const mongoose  = require('mongoose')
 const passport  = require('passport')
 const { Schema } = mongoose
 const Users = mongoose.model('Users')
-const jwt   = require('express-jwt')
+const jwt   = require('jsonwebtoken')
+
+
+exports.check_token = ( req, res ) => {
+    let token = req.query.token
+    let decoded = 'decoded'
+
+    jwt.verify(token, 'project number one', function(err, decoded) {
+        return res.send({response: true })
+        
+        if(err) {
+             return res.send({ response: false })
+        } else {
+             return res.send({ response: true })
+        }
+    })
+}
 
 exports.list = (req, res) => {
     Users.find()
@@ -13,11 +29,6 @@ exports.list = (req, res) => {
     })
 }
 exports.register = (req, res, next) => {
-
-    if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
-        return res.status(400).json(
-        { errors: "Verify Content-Type as Application/json",}) 
-    }
 
     const { body: { user } } = req
 
@@ -98,7 +109,7 @@ exports.login = (req, res, next) => {
     if(passportUser) {
       const user = passportUser
       user.token = passportUser.generateJWT()
-      return res.json({ user: user.toAuthJSON() })
+      return res.json({ user: passportUser.welcomeData() })
     }
 
     return res.status(400).json({

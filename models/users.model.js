@@ -29,7 +29,7 @@ UsersSchema.methods.generateJWT = function() {
     expirationDate.setDate(today.getDate() + 60)
 
     return jwt.sign({
-    username: this.username,
+        username: this.username,
         id: this._id,
         exp: parseInt(expirationDate.getTime() / 1000, 10),
     }, 'project number one')
@@ -47,8 +47,8 @@ UsersSchema.methods.toAuthJSON = function() {
 
 UsersSchema.methods.welcomeData = function() {
     return {
-        message: `Hello ${this.username}, this is your token: Token ${this.generateJWT()}`,
-        usage: 'Authorization: your token'
+        username: this.username,
+        token: this.generateJWT()
     }
 }
 

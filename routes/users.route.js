@@ -11,4 +11,8 @@ router.post('/login', auth.optional, usersCtrl.login)
 //Debug Route 
 router.get( '/list',auth.optional, usersCtrl.list )
 
+//Debug Route 
+router.get( '/check_token',auth.optional, usersCtrl.check_token )
+
+
 module.exports = router
