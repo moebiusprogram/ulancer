@@ -8,17 +8,12 @@ const passport  = require('passport')
 const cookieParser  = require('cookie-parser')
 const bodyParser    = require('body-parser')
 const databaseConf    = require('./config/remote.config.js')
-//const databaseConf = require('./config/database.config.js')
-const LocalStrategy = require('passport-local')
-
-const index = require('./routes/index')
+//const databaseConf  = require('./config/database.config.js')
+const constants     = require('./config/constants.config')
 
 mongoose.Promise = global.Promise
 
 const app = express()
-
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'pug')
 
 app.use(cors())
 app.use(logger('dev'))
@@ -37,34 +32,11 @@ mongoose.connect(databaseConf.url, {
 })
 mongoose.set('debug', true)
 
-require('./models/users.model')
-require('./models/posts.model')
+require('./models/accounts.model')
 
-const usersRoutes = require('./routes/users.route')
-const postsRoutes = require('./routes/posts.route')
+const accountsRoutes = require('./routes/accounts.route')
 
-const Users = mongoose.model('Users')
-
-app.use("/api/users/", usersRoutes)
-app.use("/api/posts/", postsRoutes)
-
-
-passport.use(new LocalStrategy({
-  usernameField: 'user[username]',
-  passwordField: 'user[password]',
-},
-(username, password, done) => {
-
-  Users.findOne({ username })
-    .then((user) => {
-      if(!user || !user.validPassword(password)) {
-        return done(null, false, { errors: { "username or password": "invalid" } })
-      }
-      return done(null, user)
-    }).catch(done)
-}))
-
-app.use('/', index)
+app.use("/", accountsRoutes)
 
 
 module.exports = app
