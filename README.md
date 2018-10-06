@@ -11,7 +11,6 @@ Cursos Conciencia utiliza proyectos de código abierto para su funcionamiento:
 
 * [node.js] - evented I/O for the backend
 * [Express] - fast node.js network app framework [@tjholowaychuk]
-* [Jasmine] - package of helper code for developing Jasmine projects for Node.js
 
 
 ### Instalación
