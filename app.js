@@ -27,7 +27,7 @@ mongoose.connect(databaseConf.url, {
 }).then(() => {
     console.log("Connected to database")
 }).catch(err => {
-    console.log('Error connecting with db')
+    console.log('Error connecting with db: ', err )
     process.exit()
 })
 mongoose.set('debug', true)
@@ -37,6 +37,5 @@ require('./models/accounts.model')
 const accountsRoutes = require('./routes/accounts.route')
 
 app.use("/", accountsRoutes)
-
-
+    
 module.exports = app
