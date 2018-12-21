@@ -33,16 +33,41 @@ passport.use(new JwtStrategy({
 (req, jwt_payload, done) => {
 
     //Test database or Accounts database
-    const ActualDB = utils.actualDB( req )
+    const ActualDB = utils.actualDB(req)
 
-    ActualDB.findOne({_id: jwt_payload.id }, function(err, account) {
-        if (err) {
-            return done(null, false, { message: "Error validating token" })
-        }
-        if (account) {
-            return done(null, account)
-        } else {
-            return done(null, false, { message: "Error validating token" })
-        }
+    ActualDB.findOne({ accountID: jwt_payload.accountID }, function ( err, account ) {
+	if ( err ) {
+	    return done(null, false, { message: "Error validating token" })
+	}
+	if ( account ) {
+		req.account = account
+	    return done(null, account)
+	} else {
+	    return done(null, false, { message: "Error validating token" })
+	}
     })
 }))
+
+/*
+passport.use(new JwtStrategy({
+    secretOrKey: config.jwt.signinSecret,
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    passReqToCallback: true
+},
+	( req, jwt_payload, done ) => {
+
+    //Test database or Accounts database
+    const ActualDB = utils.actualDB(req)
+
+    ActualDB.findOne({ accountID: jwt_payload.id }, function ( err, account ) {
+	if ( err ) {
+	    return done(null, false, { message: "Error validating token" })
+	}
+	if ( account ) {
+		req.account = account
+	    return done(null, account)
+	} else {
+	    return done(null, false, { message: "Error validating token" })
+	}
+    })
+}))*/

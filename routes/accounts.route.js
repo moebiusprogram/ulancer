@@ -16,10 +16,11 @@ router.post('/api/v1/signin', accountsCtrl.signin)
 router.get('/api/v1/list', accountsCtrl.list  )
 
 router.get('/api/v1/gettoken', accountsCtrl.getToken  )
+
 router.get('/api/v1/verifytoken', accountsCtrl.verifyToken  )
 
 //Auth
-router.get('/api/v1/auth', utils.required, accountsCtrl.list  )
+//router.get('/api/v1/auth', utils.required, accountsCtrl.list  )
 
 
 /** Testing Routes **/
@@ -34,9 +35,13 @@ router.post('/api/test/signin', accountsCtrl.signin)
 router.post('/api/test/signup', accountsCtrl.signup)
 
 //Auth
-router.get('/api/test/auth', utils.required, accountsCtrl.list  )
+//router.get('/api/test/auth', utils.required, accountsCtrl.list  )
 
 //Delete db
 router.get('/api/test/cleardb', accountsCtrl.cleardb  )
+
+router.get('/api/v1/profile', utils.authRequired, accountsCtrl.getProfile  )
+
+router.post('/api/v1/profile/save', utils.authRequired, accountsCtrl.saveProfile  )
 
 module.exports = router

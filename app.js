@@ -33,6 +33,7 @@ mongoose.connect(databaseConf.url, {
 mongoose.set('debug', true)
 
 require('./models/accounts.model')
+require('./models/profile.model')
 
 const accountsRoutes = require('./routes/accounts.route')
 

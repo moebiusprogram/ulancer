@@ -1,8 +1,9 @@
 const passport  = require('passport')
+const mongoose  = require( 'mongoose' )
 const utils     = require( '../utils' )
 const jwt   = require('jsonwebtoken')
-
-
+const Profile  = mongoose.model( 'Profile' )
+const _ = require('lodash')
 
 exports.signin = (req, res, next) => {
 
@@ -43,7 +44,11 @@ exports.signup = (req, res, next) => {
     if(!account.name) {
         return res.status(422).json(errorMessage( "name is required" ))
       }
-
+      
+    if(!account.lastname) {
+        return res.status(422).json(errorMessage( "lastname is required" ))
+      }
+      
     if(!account.email) {
         return res.status(422).json(errorMessage( "email is required" ))
     }
@@ -55,9 +60,11 @@ exports.signup = (req, res, next) => {
     //TODO: Implementar sanitizacion de los campos
     checkedAccount = {
         name: account.name,
+        lastname: account.lastname,
         email: account.email,
         document_type: account.document_type,
         document_number: account.document_number,
+        accountID: utils.generateAccountID()
     }
 
     //Test database or Accounts database
@@ -88,6 +95,112 @@ exports.getToken = (req, res) => {
     }, 'expected secret', { expiresIn: '60s' })
 
     return res.json({token: token})
+}
+
+//get
+exports.getProfile = async (req, res) => {
+
+    const { account: { accountID } } = req
+
+    const ActualDB = utils.actualDB(req)
+
+    console.log("actualID", accountID )
+    
+    const account = await ActualDB.findOne({ accountID: accountID }).exec()
+
+    if (!account) {
+        return res.status(401).json(utils.errorMessage("Cannot get profile data"))
+    }
+
+    const profile = await Profile.findOne({accountID: accountID}).exec()
+
+    if(!profile) {
+        return res.json({
+        name: account.name,
+        lastname: account.lastname,
+        motto: "",
+        bio: ""
+        })
+    } else {
+        return res.json({
+        name: account.name,
+        lastname: account.lastname,
+        motto: profile.motto,
+        bio: profile.bio
+        })
+    }
+}
+
+//post
+exports.saveProfile = async (req, res) => {
+
+    const { account: { accountID } } = req
+
+    const ActualDB = utils.actualDB(req)
+
+    console.log("actualID", accountID )
+
+    const account = await ActualDB.findOne({ accountID: accountID }).exec()
+
+    ActualDB.findOne({ accountID: accountID })
+    .then( account => {
+        if (!account) {
+            return res.status(401).json(utils.errorMessage("Cannot get profile data"))
+        }
+
+        if( req.body.profile.name ) {
+            account.name = req.body.profile.name
+        }
+
+        if( req.body.profile.lastname ) {
+            account.lastname = req.body.profile.lastname
+        }
+        
+        account.save()   
+    }).catch(err => {
+        console.warn(err)
+    })
+
+    const editableFields = [
+        "motto",
+        "bio"
+    ]
+
+    let updatedData = {}
+
+    //Filter data
+    for (var key in req.body.profile ) {
+
+        if (req.body.profile.hasOwnProperty(key) &&
+            req.body.profile[key] !== "",
+            utils.arrayContains(editableFields, key)
+        ) {
+            updatedData[key] = req.body.profile[key]
+        }
+    }
+
+    console.log( "Updated data: ",updatedData )
+
+    //Nothing was updated
+    if (_.isEmpty(updatedData)) {
+
+        return res.status(422).json(
+            utils.errorMessage("Nothing was updated"))
+    }
+
+    const profile = await Profile.findOneAndUpdate({ accountID: accountID},updatedData).exec()
+
+    if(!profile) {
+        updatedData.accountID =  accountID
+        await Profile.create( updatedData ) 
+    }
+    /*
+    else {
+        profile.accountID = accountID
+        profile.save(updatedData)
+    }*/
+
+    return res.json(utils.successMessage("Saved successfully"))
 }
 
 exports.verifyToken = (req, res) => {

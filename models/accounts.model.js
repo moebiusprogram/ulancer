@@ -7,8 +7,10 @@ const constants  = require('../config/constants.config')
 const uniqueValidator = require('mongoose-unique-validator')
 
 const AccountsSchema = new Schema({
+    accountID: { type : String, unique : true, required : true },
     email:{ type : String, unique : true, required : true },
     name: { type : String, required : true },
+    lastname: { type : String, required : true },
     hash: { type : String },
     salt: { type : String },
     document_type:  { type : String, enum: ['cedula', 'extranjero', 'pasaporte'], required : true },
@@ -32,8 +34,8 @@ AccountsSchema.methods.generateJWT = function() {
     expirationDate.setDate(today.getDate() + 60)
 
     return jwt.sign({
-        name: this.name,
-        id: this._id,
+        name: `${this.name} ${this.lastname}`,
+        accountID: this.accountID,
         exp: parseInt(expirationDate.getTime() / 1000, 10),
     }, constants.SECRET )
 }
