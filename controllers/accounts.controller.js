@@ -205,7 +205,7 @@ exports.saveProfile = async (req, res) => {
 }
 
 //get
-exports.getProfile = async (req, res) => {
+exports.getCourses = async (req, res) => {
 
     const courses = await Courses.find({}).exec()
 
