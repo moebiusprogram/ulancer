@@ -44,4 +44,6 @@ router.get('/api/v1/profile', utils.authRequired, accountsCtrl.getProfile  )
 
 router.post('/api/v1/profile/save', utils.authRequired, accountsCtrl.saveProfile  )
 
+router.get('/api/v1/courses', accountsCtrl.getCourses  )
+
 module.exports = router

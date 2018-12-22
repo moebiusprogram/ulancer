@@ -3,6 +3,7 @@ const mongoose  = require( 'mongoose' )
 const utils     = require( '../utils' )
 const jwt   = require('jsonwebtoken')
 const Profile  = mongoose.model( 'Profile' )
+const Courses  = mongoose.model( 'Courses' )
 const _ = require('lodash')
 
 exports.signin = (req, res, next) => {
@@ -202,6 +203,19 @@ exports.saveProfile = async (req, res) => {
 
     return res.json(utils.successMessage("Saved successfully"))
 }
+
+//get
+exports.getProfile = async (req, res) => {
+
+    const courses = await Courses.find({}).exec()
+
+    if(courses) {
+        return res.json({model: courses})
+    } else {
+        return res.json({model:[]})
+    }
+}
+
 
 exports.verifyToken = (req, res) => {
     let token = req.query.token
