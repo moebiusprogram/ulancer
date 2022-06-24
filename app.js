@@ -23,16 +23,8 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')) )
 app.use(express.static(path.join(__dirname, 'public/images')) )
 
-mongoose.connect('mongodb://localhost:27017/ulancer', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log("Connected to database")
-}).catch(err => {
-    console.log('Error connecting with db: ', err )
-    process.exit()
-})
-mongoose.set('debug', true)
+
+mongoose.connect( 'mongodb://localhost:27017/ulancer' , {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
