@@ -7,8 +7,8 @@ const mongoose  = require('mongoose')
 const passport  = require('passport')
 const cookieParser  = require('cookie-parser')
 const bodyParser    = require('body-parser')
-const databaseConf    = require('./config/remote.config.js')
-//const databaseConf  = require('./config/database.config.js')
+//const databaseConf    = require('./config/remote.config.js')
+const databaseConf  = require('./config/database.config.js')
 const constants     = require('./config/constants.config')
 
 mongoose.Promise = global.Promise
@@ -21,9 +21,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')) )
+app.use(express.static(path.join(__dirname, 'public/images')) )
 
 mongoose.connect(databaseConf.url, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 }).then(() => {
     console.log("Connected to database")
 }).catch(err => {
@@ -37,153 +39,134 @@ require('./models/profile.model')
 
 const model = [
       {
-        name: 'Curso de Diseño Web',
+        name: 'Diseño Web',
         author: 'José Javier Villena',
         rating: 2,
         students: 8,
-        image: '/images/cursos/1.jpg'
+        image: '/images/servicios/1.jpg'
       },
       {
         name: 'Gestión de Proyectos Pequeños',
         author: 'Darwin Campoverde',
         rating: 3,
         students: 12,
-        image: '/images/cursos/2.png'
+        image: '/images/servicios/2.png'
       },
       {
-        name: 'Yogashala - Danzando con el corazón',
-        author: 'Fundación Yogashala',
-        rating: 5,
-        students: 4,
-        image: '/images/cursos/3.png'
-      },
-      {
-        name: 'Adobe Lightroom 5. The Library and Develop Modules',
-        author: 'Santi Kierulf',
+        name: 'Especialista en Adobe Lightroom 5',
+        author: 'Santi Mendoza',
         rating: 3,
         students: 14,
-        image: '/images/cursos/4.jpg'
+        image: '/images/servicios/4.jpg'
       },
       {
-        name: 'Aprende Coaching y Liderazgo Modulo 0',
+        name: 'Asistente Virtual',
         author: 'Francisco Lopez',
         rating: 4,
         students: 12,
-        image: '/images/cursos/5.png'
+        image: '/images/servicios/5.png'
       },
       {
-        name: 'Gana un Sueldo 2.0 trabajando como Freelancer',
+        name: 'Diseñador Gráfico',
         author: 'Jesus Planas',
         rating: 3,
         students: 5,
-        image: '/images/cursos/6.png'
+        image: '/images/servicios/6.png'
       },
       {
-        name: 'Curso de Ingles - Nivel Alto',
+        name: 'Traducciones de Inglés',
         author: 'Alberto Carranza',
         rating: 4,
         students: 13,
-        image: '/images/cursos/7.png'
+        image: '/images/servicios/7.png'
       },
       {
-        name: 'Taller de Inicio al manejo de smartphones y tablets Android',
+        name: 'Community Manager',
         author: 'Juan Ríos',
         rating: 5,
         students: 9,
-        image: '/images/cursos/8.jpg'
+        image: '/images/servicios/8.jpg'
       },
       {
-        name: 'Clima Organizacional',
+        name: 'Asistente Virtual 2',
         author: 'Stefany Mestre',
         rating: 3,
         students: 16,
-        image: '/images/cursos/9.png'
+        image: '/images/servicios/9.png'
       },
       {
-        name: 'Master Time Management in 2 Hours! - Productivity Guide',
+        name: 'Gestión de Proyectos',
         author: 'Shawn Malkou',
         rating: 2,
         students: 2,
-        image: '/images/cursos/10.jpg'
+        image: '/images/servicios/10.jpg'
       },
       {
-        name: 'Síntesis: Diseño Sonoro',
+        name: 'Creación y producción audiovisual',
         author: 'Rodrigo Robles',
         rating: 1,
         students: 0,
-        image: '/images/cursos/11.png'
+        image: '/images/servicios/11.png'
       },
       {
-        name: 'Aprende Programación desde cero con Diagramas de Flujo',
+        name: 'Asesorías en Excel',
         author: 'por alejandro meza',
         rating: 3,
         students: 4,
-        image: '/images/cursos/12.jpg'
+        image: '/images/servicios/12.jpg'
       },
       {
-        name: 'Administración Básica Con Sql Server',
+        name: 'Programación de Sql Server',
         author: 'Denis Guido',
         rating: 4,
         students: 6,
-        image: '/images/cursos/13.jpg'
+        image: '/images/servicios/13.jpg'
       },
       {
-        name: 'Curso Básico de Salsa',
-        author: 'Chocolifestyle',
-        rating: 2,
-        students: 9,
-        image: '/images/cursos/14.png'
-      },
-      {
-        name: 'Curso de Edición de Videos con Camtasia',
+        name: 'Edición de Videos con Camtasia',
         author: 'Rubén Molinero',
         rating: 2,
         students: 20,
-        image: '/images/cursos/15.jpg'
+        image: '/images/servicios/15.jpg'
       },
       {
-        name: 'Gánate la vida jugando videojuegos: La Manera Realista',
+        name: 'Creador de Videojuegos',
         author: 'Marcos Gutiérrez',
         rating: 4,
         students: 2,
-        image: '/images/cursos/16.jpg'
+        image: '/images/servicios/16.jpg'
       },
       {
-        name: 'Género, igualdad de trato y lucha contra la discriminación',
+        name: 'Asesoría Legal',
         author: 'María Vega',
         rating: 5,
         students: 4,
-        image: '/images/cursos/17.jpg'
+        image: '/images/servicios/17.jpg'
       },
       {
-        name: 'Email Writing Masterclass: Fix these 5 mistakes',
+        name: 'Redacción de Correos',
         author: 'Daria Storozhilova',
         rating: 4,
         students: 12,
-        image: '/images/cursos/18.png'
+        image: '/images/servicios/18.png'
       },
       {
-        name: 'EXCEL 2013 para profesionales y directivos',
+        name: 'EXCEL 2013',
         author: 'por Federico Huércano',
         rating: 3,
         students: 11,
-        image: '/images/cursos/19.png'
+        image: '/images/servicios/19.png'
       },
       {
-        name: 'Como Criar um Site ou Blog com WordPress em 2 horas',
+        name: 'Instalaciones de Wordpress',
         author: 'por Mike Omar',
         rating: 2,
         students: 5,
-        image: '/images/cursos/20.jpg'
-      },
-      {
-        name: '1 Hour Japanese The Most Important Aspects Fast and Easy',
-        author: 'Pedro Planas',
-        rating: 2,
-        students: 4,
-        image: '/images/cursos/21.jpg'
+        image: '/images/servicios/20.jpg'
       }
     ]
+
+
 const { Courses }  = require('./models/courses.model')
 
 var setCourses =  () => {
@@ -200,6 +183,7 @@ var setCourses =  () => {
     })
 }
 
+//setCourses()
 
 const accountsRoutes = require('./routes/accounts.route')
 
