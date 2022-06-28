@@ -28,6 +28,7 @@ exports.signin = (req, res, next) => {
         }
 
         if(passportUser) {
+          console.log("Signed",passportUser)
           return res.json( signinMessage( passportUser.generateJWT() ) )
         }
 
